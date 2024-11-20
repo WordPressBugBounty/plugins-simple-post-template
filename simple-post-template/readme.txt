@@ -1,9 +1,9 @@
-=== Plugin Name ===
+=== Simple Content Templates for Blog Posts & Pages ===
 Contributors: clifgriffin, nodleredoy
 Tags: post template, content template, post from template, templates, copy, clone, duplicate
 Requires at least: 3.6
-Tested up to: 6.3.1
-Stable tag: 2.2.5
+Tested up to: 6.7
+Stable tag: 2.2.6
 
 Create content templates for your posts and pages. When creating a new post or page use one of your content templates as the starting point!
 
@@ -35,6 +35,11 @@ https://youtu.be/VeZwerk2aN0
 We hope you enjoy creating with Simple Content Templates!
 
 == Changelog ==
+
+**Version 2.2.6**
+
+* Bump version
+* Update dependencies
 
 **Version 2.2.5**
 
