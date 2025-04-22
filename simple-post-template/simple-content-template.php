@@ -16,14 +16,14 @@
  * Plugin Name:       Simple Content Templates for Blog Posts & Pages
  * Plugin URI:        https://www.advancedcontenttemplates.com/
  * Description:       A simple to use content template system. Create similarly structured posts & pages with ease.
- * Version:           2.2.6
+ * Version:           2.2.61
  * Author:            Clifton Griffin
  * Author URI:        https://objectiv.co
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       advanced-content-templates
  * Domain Path:       /languages
- * Tested up to:      6.7
+ * Tested up to:      6.8
  */
 
 // If this file is called directly, abort.
@@ -31,7 +31,7 @@ if (! defined('WPINC')) {
     die;
 }
 
-define('CGD_SCT_VERSION', '2.2.6');
+define('CGD_SCT_VERSION', '2.2.61');
 define('CGD_SCT_NAME', 'Simple Content Templates');
 
 /**
