@@ -38,7 +38,7 @@ class Simple_Content_Templates extends WordPress_SimpleSettings {
 	 * @var string
 	 * @access public
 	 */
-	var $post_type = "act_template";
+	var $post_type = 'act_template';
 
 
 	/**
@@ -49,7 +49,7 @@ class Simple_Content_Templates extends WordPress_SimpleSettings {
 	 * @var string
 	 * @access public
 	 */
-	var $prefix = "Simple_Content_Templates";
+	var $prefix = 'Simple_Content_Templates';
 
 
 	/**
@@ -60,7 +60,7 @@ class Simple_Content_Templates extends WordPress_SimpleSettings {
 	 * @var string
 	 * @access public
 	 */
-	var $short_prefix = "act_";
+	var $short_prefix = 'act_';
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -102,8 +102,8 @@ class Simple_Content_Templates extends WordPress_SimpleSettings {
 	public function __construct() {
 
 		parent::__construct();
-		$this->plugin_name  = 'advanced-content-templates';
-		$this->version = CGD_SCT_VERSION;
+		$this->plugin_name = 'advanced-content-templates';
+		$this->version     = CGD_SCT_VERSION;
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -133,24 +133,24 @@ class Simple_Content_Templates extends WordPress_SimpleSettings {
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-advanced-content-templates-loader.php';
+		require_once plugin_dir_path( __DIR__ ) . 'includes/class-advanced-content-templates-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-advanced-content-templates-i18n.php';
+		require_once plugin_dir_path( __DIR__ ) . 'includes/class-advanced-content-templates-i18n.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the Dashboard.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-advanced-content-templates-admin.php';
+		require_once plugin_dir_path( __DIR__ ) . 'admin/class-advanced-content-templates-admin.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-advanced-content-templates-public.php';
+		require_once plugin_dir_path( __DIR__ ) . 'public/class-advanced-content-templates-public.php';
 
 		$this->loader = new Simple_Content_Templates_Loader();
 	}
@@ -169,7 +169,6 @@ class Simple_Content_Templates extends WordPress_SimpleSettings {
 		$plugin_i18n = new Simple_Content_Templates_i18n();
 
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
-
 	}
 
 	/**
@@ -187,21 +186,24 @@ class Simple_Content_Templates extends WordPress_SimpleSettings {
 		$this->loader->add_action( 'admin_enqueue_scripts', $act_plugin_admin, 'enqueue_scripts' );
 
 		// The admin menus
-		$this->loader->add_action('admin_menu', $act_plugin_admin, 'admin_menus', 11);
+		$this->loader->add_action( 'admin_menu', $act_plugin_admin, 'admin_menus', 11 );
 
 		// Template Selector Metabox
-		$this->loader->add_action('add_meta_boxes', $act_plugin_admin, 'boxes' );
+		$this->loader->add_action( 'add_meta_boxes', $act_plugin_admin, 'boxes' );
 
 		// Save page template on template save (confusing wording I know)
-		$this->loader->add_action('save_post', $act_plugin_admin, 'save_template', 10, 1 );
+		$this->loader->add_action( 'save_post', $act_plugin_admin, 'save_template', 10, 1 );
+
+		// Add nonce field for page template saving
+		$this->loader->add_action( 'post_submitbox_misc_actions', $act_plugin_admin, 'add_template_nonce_field' );
 
 		// Redirect to settings on first activate
-		$this->loader->add_action('admin_init', $act_plugin_admin, 'redirect_on_first_activate' );
+		$this->loader->add_action( 'admin_init', $act_plugin_admin, 'redirect_on_first_activate' );
 
 		// Actually load templates, yo
-		$this->loader->add_filter('default_excerpt', $act_plugin_admin, 'template_load', 1, 2);
+		$this->loader->add_filter( 'default_excerpt', $act_plugin_admin, 'template_load', 1, 2 );
 
-		$this->loader->add_action('admin_init', $this, 'sct_upgrade', 1, 1);
+		$this->loader->add_action( 'admin_init', $this, 'sct_upgrade', 1, 1 );
 	}
 
 	/**
@@ -216,8 +218,7 @@ class Simple_Content_Templates extends WordPress_SimpleSettings {
 		$plugin_public = new Simple_Content_Templates_Public( $this->get_Simple_Content_Templates(), $this->get_version(), $this );
 
 		// Register Post Type
-		$this->loader->add_action('init', $plugin_public, 'register_post_type', 0 );
-
+		$this->loader->add_action( 'init', $plugin_public, 'register_post_type', 0 );
 	}
 
 	/**
@@ -228,7 +229,7 @@ class Simple_Content_Templates extends WordPress_SimpleSettings {
 	public function run() {
 		$this->loader->run();
 
-		do_action('act_loaded');
+		do_action( 'act_loaded' );
 	}
 
 	/**
@@ -270,18 +271,21 @@ class Simple_Content_Templates extends WordPress_SimpleSettings {
 	 * @return void
 	 */
 	function activate() {
-		if (  get_option('spt_version', false) === false ) {
-			$this->update_setting('act_first_activate', true);
+		if ( get_option( 'spt_version', false ) === false ) {
+			$this->update_setting( 'act_first_activate', true );
 
 			// Default Post Setting
-			$this->add_setting('act_post_type_settings', array(
-				'post' => array(
-					'show_ui' => true,
+			$this->add_setting(
+				'act_post_type_settings',
+				array(
+					'post' => array(
+						'show_ui' => true,
+					),
 				)
-			));
+			);
 		}
 
-		update_option('spt_version', CGD_SCT_VERSION);
+		update_option( 'spt_version', CGD_SCT_VERSION );
 	}
 
 	/**
@@ -294,25 +298,24 @@ class Simple_Content_Templates extends WordPress_SimpleSettings {
 		global $wpdb;
 
 		// Make sure we have a table from the old version
-		if ( $wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}simple_post_templates'") !== "{$wpdb->prefix}simple_post_templates" ) return;
+		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}simple_post_templates'" ) !== "{$wpdb->prefix}simple_post_templates" ) {
+return;
+		}
 
-		// Make sure user is an admin
-		if ( isset($_GET['force_act_convert']) && ! current_user_can('manage_options') ) return;
+		$old_templates = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}simple_post_templates" );
 
-		$old_templates = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}simple_post_templates");
-
-		foreach($old_templates as $ot) {
-			$post = array();
-			$post['post_type'] = $this->post_type;
-			$post['post_status'] = 'publish';
-			$post['post_title'] = $ot->title;
+		foreach ( $old_templates as $ot ) {
+			$post                 = array();
+			$post['post_type']    = $this->post_type;
+			$post['post_status']  = 'publish';
+			$post['post_title']   = $ot->title;
 			$post['post_content'] = $ot->content;
 			$post['post_excerpt'] = $ot->excerpt;
 
-			$result = wp_insert_post($post);
+			$result = wp_insert_post( $post );
 		}
 
-		$this->update_setting('act_converted_spt', true);
+		$this->update_setting( 'act_converted_spt', true );
 	}
 
 	/**
@@ -332,7 +335,7 @@ class Simple_Content_Templates extends WordPress_SimpleSettings {
 	 * @return void
 	 */
 	public function get_php_enabled() {
-		return apply_filters('act_enable_php_in_templates', false);
+		return apply_filters( 'act_enable_php_in_templates', false );
 	}
 
 	/**
@@ -343,12 +346,14 @@ class Simple_Content_Templates extends WordPress_SimpleSettings {
 	 */
 	public function get_post_types() {
 		$post_type_objects = array();
-		$post_types = get_post_types( array('show_ui' => true) );
-		unset($post_types['attachment']);
+		$post_types        = get_post_types( array( 'show_ui' => true ) );
+		unset( $post_types['attachment'] );
 
-		foreach($post_types as $pt) {
-			if ( $pt == $this->post_type ) continue;
-			$post_type_objects[] = get_post_type_object($pt);
+		foreach ( $post_types as $pt ) {
+			if ( $pt == $this->post_type ) {
+continue;
+			}
+			$post_type_objects[] = get_post_type_object( $pt );
 		}
 
 		return $post_type_objects;
@@ -356,25 +361,44 @@ class Simple_Content_Templates extends WordPress_SimpleSettings {
 
 	/**
 	 * Upgrade SCT <= 2.0.x to 2.1.x
+	 *
 	 * @return void
 	 */
 	function sct_upgrade() {
 		global $wpdb;
 
 		// If table doesn't exist, bail
-		if ( $wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}simple_post_templates'") !== "{$wpdb->prefix}simple_post_templates" ) return;
-
-		// Force ACT convert
-		if ( isset($_GET['force_act_convert']) ) {
-			$this->convert_sct_to_act();
+		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->prefix}simple_post_templates'" ) !== "{$wpdb->prefix}simple_post_templates" ) {
+return;
 		}
 
-		if( $this->get_setting('act_converted_spt') === false && get_option('spt_version', false) !== false ) {
-			$old_templates = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}simple_post_templates");
+		// Check if force conversion not requested - handle automatic conversion
+		if ( ! isset( $_GET['force_act_convert'] ) ) {
+			// Automatic conversion check
+			if ( $this->get_setting( 'act_converted_spt' ) === false && get_option( 'spt_version', false ) !== false ) {
+				$old_templates = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}simple_post_templates" );
 
-			if ( ! empty($old_templates) ) {
-				$this->convert_sct_to_act();
+				if ( ! empty( $old_templates ) ) {
+					$this->convert_sct_to_act();
+				}
 			}
+			return;
 		}
+
+		// Force ACT convert requested - verify nonce and admin permissions
+		if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'force_act_convert' ) ) {
+			wp_die( 'Security check failed. Please try again.', 'Security Error', array( 'response' => 403 ) );
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( 'You do not have permission to perform this action. Admin access required.', 'Permission Error', array( 'response' => 403 ) );
+		}
+
+		// Perform conversion
+		$this->convert_sct_to_act();
+
+		// Redirect after conversion to prevent re-triggering
+		wp_safe_redirect( admin_url( 'edit.php?post_type=act_template&converted=1' ) );
+		exit;
 	}
 }

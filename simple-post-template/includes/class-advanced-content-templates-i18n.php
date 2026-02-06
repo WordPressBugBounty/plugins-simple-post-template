@@ -43,10 +43,9 @@ class Simple_Content_Templates_i18n {
 	public function load_plugin_textdomain() {
 
 		load_plugin_textdomain(
-			'advanced-content-templates',
+			'simple-post-template',
 			false,
 			dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
 		);
-
 	}
 }

@@ -1,9 +1,11 @@
 === Simple Content Templates for Blog Posts & Pages ===
 Contributors: clifgriffin, nodleredoy
-Tags: post template, content template, post from template, templates, copy, clone, duplicate
+Tags: post template, template, copy, clone, duplicate post
 Requires at least: 3.6
 Tested up to: 6.8
-Stable tag: 2.2.61
+Stable tag: 2.2.7
+License: GPL-2.0+
+License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
 Create content templates for your posts and pages. When creating a new post or page use one of your content templates as the starting point!
 
@@ -35,6 +37,13 @@ https://youtu.be/VeZwerk2aN0
 We hope you enjoy creating with Simple Content Templates!
 
 == Changelog ==
+
+**Version 2.2.7**
+
+* Fixes a possible - though highly unlikely CSRF security issue
+* Fixes a couple small warnings that were showing up with the plugin-check
+* Bump version
+* Update dependencies
 
 **Version 2.2.61**
 
